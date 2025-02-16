@@ -11,6 +11,7 @@ http:
         chain-oauth:
             chain:
                 middlewares:
+                    - middlewares-https-redirect
                     - middlewares-rate-limit
                     - middlewares-secure-headers
                     - middlewares-oauth

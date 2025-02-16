@@ -11,5 +11,6 @@ http:
         chain-no-auth:
             chain:
                 middlewares:
+                    - middlewares-https-redirect
                     - middlewares-rate-limit
                     - middlewares-secure-headers
