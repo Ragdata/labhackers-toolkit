@@ -148,6 +148,7 @@ services:
             # HTTP Routers
             - traefik.http.routers.traefik.entrypoints=ssl
             - traefik.http.routers.traefik.rule=Host(`traefik.aever.au`)
+            - traefik.http.routers.traefik.tls=true
             # Services
             - traefik.http.routers.api.service=api@internal
             # Healthcheck / ping
