@@ -7,6 +7,36 @@
 # TRAEFIK
 ####################################################################
 
+## NETWORKS #######################################################
+networks:
+
+    public:
+        driver: overlay
+        encrypted: true
+        attachable: true
+        options:
+            - --subnet=${SUBNET_PUBLIC}
+            - --gateway=${GATEWAY_PUBLIC}
+            - --scope=swarm
+
+    private:
+        driver: overlay
+        encrypted: true
+        attachable: true
+        options:
+            - --subnet=${SUBNET_PRIVATE}
+            - --gateway=${GATEWAY_PRIVATE}
+            - --scope=swarm
+
+## SECRETS #########################################################
+secrets:
+
+    basic_auth_credentials:
+        file: ${SECRETS}/basic_auth_credentials
+
+    CF_DNS_API_TOKEN:
+        file: ${SECRETS}/CF_DNS_API_TOKEN
+
 ## SERVICES ########################################################
 services:
 
@@ -128,19 +158,3 @@ services:
             # - "traefik.http.routers.ping.service=ping@internal"
             # Middleware
             - "traefik.http.routers.basic-auth.middlewares=chain-basic-auth@file"
-
-## SECRETS #########################################################
-secrets:
-
-    basic_auth_credentials:
-        external: true
-
-    CF_DNS_API_TOKEN:
-        external: true
-
-## NETWORKS ########################################################
-networks:
-    public:
-        external: true
-    private:
-        external: true

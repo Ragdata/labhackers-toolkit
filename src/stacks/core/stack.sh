@@ -18,4 +18,4 @@ cp "$DATADIR"/logs/* "$DOCKER_VOL"/traefik/logs/.
 
 
 
-docker stack deploy -c core-compose.yml
+docker stack deploy -c traefik.yml traefik
