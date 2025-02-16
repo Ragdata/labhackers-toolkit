@@ -4,7 +4,7 @@ export SCRIPT_DIR="$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null &
 
 source "$(dirname $(dirname "$SCRIPT_DIR") )/lib/functions.sh"
 
-file2env "$(dirname $(dirname $(dirname "$SCRIPT_DIR") ) )/common.env"
+file2env "$(dirname $(dirname "$SCRIPT_DIR") )/common.env"
 
 export NODE_ID=$(docker info -f '{{.Swarm.NodeID}}')
 export HASHED_PASSWORD=$(openssl passwd -apr1)
