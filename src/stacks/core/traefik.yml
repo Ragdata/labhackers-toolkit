@@ -151,13 +151,12 @@ services:
             - traefik.http.routers.traefik.rule=Host(`aever.au`)
             - traefik.http.routers.traefik.middlewares=https-redirect@file
             # HTTP Routers
-            - traefik.http.routers.traefik.entrypoints=ssl
-            - traefik.http.routers.traefik.rule=Host(`traefik.aever.au`) && Path(`/dashboard`)
-            # tls config
-            - traefik.http.routers.traefik.tls=true
-            - traefik.http.routers.traefik.tls.options=default
+            - traefik.http.routers.dashboard.tls=true
+            - traefik.http.routers.dashboard.entrypoints=ssl
+            - traefik.http.routers.dashboard.rule=Host(`traefik.aever.au`) && (PathPrefix(`/api`) || PathPrefix(`/dashboard/`))
+            - traefik.http.routers.dashboard.service=api@internal
+            # - traefik.http.routers.traefik.tls.options=default
             # Services
-            - traefik.http.routers.api.service=api@internal
             # Healthcheck / ping
             # - "traefik.http.routers.ping.rule=Host(`traefik.aever.au`) && Path(`/ping`)"
             # - "traefik.http.routers.ping.tls=true"
