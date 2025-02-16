@@ -17,7 +17,6 @@ networks:
         ipam:
             config:
                 - subnet: $SUBNET_PUBLIC
-                - gateway: $GATEWAY_PUBLIC
 
     private:
         name: private
@@ -26,7 +25,6 @@ networks:
         ipam:
             config:
                 - subnet: $SUBNET_PRIVATE
-                - gateway: $GATEWAY_PRIVATE
 
 ## SECRETS #########################################################
 secrets:
