@@ -12,20 +12,20 @@ networks:
 
     public:
         driver: overlay
-        encrypted: true
         attachable: true
         options:
             - --subnet=${SUBNET_PUBLIC}
             - --gateway=${GATEWAY_PUBLIC}
+            - --encrypted=true
             - --scope=swarm
 
     private:
         driver: overlay
-        encrypted: true
         attachable: true
         options:
             - --subnet=${SUBNET_PRIVATE}
             - --gateway=${GATEWAY_PRIVATE}
+            - --encrypted=true
             - --scope=swarm
 
 ## SECRETS #########################################################
