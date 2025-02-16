@@ -16,7 +16,7 @@ networks:
         attachable: true
         ipam:
             config:
-                - subnet: $SUBNET_PUBLIC
+                - subnet: 172.10.0.1/24
 
     private:
         name: private
@@ -24,7 +24,7 @@ networks:
         attachable: true
         ipam:
             config:
-                - subnet: $SUBNET_PRIVATE
+                - subnet: 172.10.10.1/24
 
 ## SECRETS #########################################################
 secrets:
