@@ -9,9 +9,9 @@
 http:
     routers:
         proxmox-rtr:
-            rule: "Host(`pve.{{env "DOMAIN"}}`)"
+            rule: "Host(`pve.aever.au`)"
             entryPoints:
-                - websecure
+                - ssl
             middlewares:
                 - chain-oauth
             service: proxmox-svc

@@ -12,7 +12,7 @@ tcp:
             entryPoints:
                 - ssl
             # rule: "HostSNIRegexp(`example.com`) || HostSNIRegexp(`{subdomain:[a-z0-9]+}.example.com`)"
-            rule: "HostSNIRegexp(`{{env "DOMAIN"}}`) || HostSNIRegexp(`{subdomain:[a-z0-9]+}.{{env "DOMAIN"}}`)"
+            rule: "HostSNIRegexp(`aever.au`) || HostSNIRegexp(`{subdomain:[a-z0-9]+}.aever.au`)"
             service: synology-traefik-svc
             tls:
                 passthrough: true

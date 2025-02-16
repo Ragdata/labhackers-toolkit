@@ -10,5 +10,5 @@ http:
     middlewares:
         middlewares-basic-auth:
             basicAuth:
-                usersFile: "{{env "SECRETS"}}/basic_auth_credentials"
+                usersFile: "/mnt/vol/secrets/basic_auth_credentials"
                 realm: "Traefik 3 Basic Auth"
