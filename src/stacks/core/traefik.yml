@@ -17,8 +17,7 @@ networks:
         ipam:
             config:
                 - subnet: $SUBNET_PUBLIC
-                  ip_range: $SUBNET_PUBLIC
-                  gateway: $GATEWAY_PUBLIC
+                - gateway: $GATEWAY_PUBLIC
 
     private:
         name: private
@@ -27,8 +26,7 @@ networks:
         ipam:
             config:
                 - subnet: $SUBNET_PRIVATE
-                  ip_range: $SUBNET_PRIVATE
-                  gateway: $GATEWAY_PRIVATE
+                - gateway: $GATEWAY_PRIVATE
 
 ## SECRETS #########################################################
 secrets:
