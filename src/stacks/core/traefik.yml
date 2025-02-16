@@ -11,22 +11,24 @@
 networks:
 
     public:
+        name: public
         driver: overlay
         attachable: true
-        options:
-            - --subnet=${SUBNET_PUBLIC}
-            - --gateway=${GATEWAY_PUBLIC}
-            - --encrypted=true
-            - --scope=swarm
+        ipam:
+            config:
+                - subnet: $SUBNET_PUBLIC
+                  ip_range: $SUBNET_PUBLIC
+                  gateway: $GATEWAY_PUBLIC
 
     private:
+        name: private
         driver: overlay
         attachable: true
-        options:
-            - --subnet=${SUBNET_PRIVATE}
-            - --gateway=${GATEWAY_PRIVATE}
-            - --encrypted=true
-            - --scope=swarm
+        ipam:
+            config:
+                - subnet: $SUBNET_PRIVATE
+                  ip_range: $SUBNET_PRIVATE
+                  gateway: $GATEWAY_PRIVATE
 
 ## SECRETS #########################################################
 secrets:
