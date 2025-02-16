@@ -1,0 +1,16 @@
+####################################################################
+# Author:       Ragdata
+# Date:         12/02/2025
+# License:      MIT License
+# Copyright:    Copyright © 2025 Redeyed Technologies
+####################################################################
+# Chain - Basic Auth
+####################################################################
+http:
+    middlewares:
+        chain-basic-auth:
+            chain:
+                middlewares:
+                    - middlewares-rate-limit
+                    - middlewares-secure-headers
+                    - middlewares-basic-auth

@@ -1,0 +1,23 @@
+####################################################################
+# Author:       Ragdata
+# Date:         12/02/2025
+# License:      MIT License
+# Copyright:    Copyright © 2025 Redeyed Technologies
+####################################################################
+# EXAMPLE - Domain Passthrough
+####################################################################
+tcp:
+    routers:
+        traefik-rtr:
+            entryPoints:
+                - ssl
+            # rule: "HostSNIRegexp(`example.com`) || HostSNIRegexp(`{subdomain:[a-z0-9]+}.example.com`)"
+            rule: "HostSNIRegexp(`{{env "DOMAIN"}}`) || HostSNIRegexp(`{subdomain:[a-z0-9]+}.{{env "DOMAIN"}}`)"
+            service: synology-traefik-svc
+            tls:
+                passthrough: true
+        services:
+            synology-traefik-svc:
+                loadBalancer:
+                    servers:
+                        - address: "192.168.1.254:443"

@@ -1,0 +1,16 @@
+####################################################################
+# Author:       Ragdata
+# Date:         12/02/2025
+# License:      MIT License
+# Copyright:    Copyright © 2025 Redeyed Technologies
+####################################################################
+# OAuth External
+####################################################################
+http:
+    middlewares:
+        middlewares-oauth-external:
+            forwardAuth:
+                address: "https://oauth.{{env "DOMAIN"}}" # Make sure you have the OAuth service in a remote server
+                trustForwardHeader: true
+                authResponseHeaders:
+                    - "X-Forwarded-User"

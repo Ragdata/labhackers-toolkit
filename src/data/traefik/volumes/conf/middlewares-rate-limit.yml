@@ -1,0 +1,14 @@
+####################################################################
+# Author:       Ragdata
+# Date:         12/02/2025
+# License:      MIT License
+# Copyright:    Copyright © 2025 Redeyed Technologies
+####################################################################
+# Rate Limit
+####################################################################
+http:
+    middlewares:
+        middlewares-rate-limit:
+            rateLimit:
+                average: 100
+                burst: 50

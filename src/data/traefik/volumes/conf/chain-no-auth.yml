@@ -1,0 +1,15 @@
+####################################################################
+# Author:       Ragdata
+# Date:         12/02/2025
+# License:      MIT License
+# Copyright:    Copyright © 2025 Redeyed Technologies
+####################################################################
+# Chain - No Auth
+####################################################################
+http:
+    middlewares:
+        chain-no-auth:
+            chain:
+                middlewares:
+                    - middlewares-rate-limit
+                    - middlewares-secure-headers

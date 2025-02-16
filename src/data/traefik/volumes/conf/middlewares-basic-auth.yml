@@ -1,0 +1,14 @@
+####################################################################
+# Author:       Ragdata
+# Date:         12/02/2025
+# License:      MIT License
+# Copyright:    Copyright © 2025 Redeyed Technologies
+####################################################################
+# Basic Auth
+####################################################################
+http:
+    middlewares:
+        middlewares-basic-auth:
+            basicAuth:
+                usersFile: "{{env "SECRETS"}}/basic_auth_credentials"
+                realm: "Traefik 3 Basic Auth"

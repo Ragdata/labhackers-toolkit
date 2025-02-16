@@ -1,0 +1,43 @@
+####################################################################
+# Author:       Ragdata
+# Date:         12/02/2025
+# License:      MIT License
+# Copyright:    Copyright © 2025 Redeyed Technologies
+####################################################################
+# CORE STACK
+####################################################################
+
+## NETWORKS #######################################################
+networks:
+
+    public:
+        driver: overlay
+        encrypted: true
+        attachable: true
+        options:
+            - --subnet=${SUBNET_PUBLIC}
+            - --gateway=${GATEWAY_PUBLIC}
+            - --scope=swarm
+
+    private:
+        driver: overlay
+        encrypted: true
+        attachable: true
+        options:
+            - --subnet=${SUBNET_PRIVATE}
+            - --gateway=${GATEWAY_PRIVATE}
+            - --scope=swarm
+
+## SECRETS #########################################################
+secrets:
+
+    basic_auth_credentials:
+        file: ${SECRETS}/basic_auth_credentials
+
+    CF_DNS_API_TOKEN:
+        file: ${SECRETS}/CF_DNS_API_TOKEN
+
+## INCLUDES ########################################################
+include:
+
+    - traefik.yml

@@ -1,0 +1,10 @@
+/.archive
+/.idea
+/.vscode
+
+/log
+!/lib/plugins/label-manager/label_manager/log
+/custom
+/reg
+
+secrets/*

@@ -1,0 +1,146 @@
+####################################################################
+# Author:       Ragdata
+# Date:         12/02/2025
+# License:      MIT License
+# Copyright:    Copyright © 2025 Redeyed Technologies
+####################################################################
+# TRAEFIK
+####################################################################
+
+## SERVICES ########################################################
+services:
+
+    #===============================================================
+    # TRAEFIK
+    #===============================================================
+    traefik:
+        image: traefik:v3.2
+        networks:
+            public:
+                ipv4_address: 172.10.0.254
+            private:
+                ipv4_address: 172.10.10.254
+        environment:
+            - CF_DNS_API_TOKEN_FILE=/run/secrets/CF_DNS_API_TOKEN
+            - HTPASSWD_FILE=/run/secrets/basic_auth_credentials
+        secrets:
+            - CF_DNS_API_TOKEN
+            - basic_auth_credentials
+        deploy:
+            placement:
+                constraints:
+                    - node.labels.traefik-certs == true
+        ports:
+            - target: 80        # http
+              published: 80
+              protocol: tcp
+              mode: host
+            - target: 443       # https
+              published: 443
+              protocol: tcp
+              mode: host
+            # - target: 8800      # dashboard
+            #   published: 8800
+            #   protocol: tcp
+            #   mode: host
+            # - target: 8081      # ping
+            #   published: 8081
+            #   protocol: tcp
+            #   mode: host
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock:ro
+            - /etc/localtime:/etc/localtime:ro
+            - /etc/timezone:/etc/timezone:ro
+            - $DOCKER_VOL/traefik/cert:/mnt/cert
+            - $DOCKER_VOL/traefik/conf:/mnt/conf
+            - $DOCKER_VOL/traefik/logs:/mnt/logs
+        command:    # global options
+            - --global.checkNewVersion=true
+            - --global.sendAnonymousUsage=true
+            # entrypoints
+            - --entrypoints.web.address=:80
+            - --entrypoints.ssl.address=:443
+            # - --entrypoints.traefik.address=:8800
+            # - --entrypoints.ping.address=:8081
+            # redirects
+            - --entrypoints.web.http.redirections.entrypoint.to=ssl
+            - --entrypoints.web.http.redirections.entrypoint.scheme=https
+            - --entrypoints.web.http.redirections.entrypoint.permanent=true
+            # services
+            - --api=true
+            # - --api.dashboard=true
+            # - --api.insecure=true
+            # - --ping=true
+            # - --serversTransport.insecureSkipVerify=true
+            # allow the following IPs to set X-Forwarder headers
+            - --entrypoints.ssl.forwardedHeaders.trustedIPs=${CLOUDFLARE_IPS},${LOCAL_IPS}
+            # log
+            - --log=true
+            - --log.filepath=${DOCKER_VOL}/traefik/logs/traefik.log
+            - --log.level=INFO
+            # accessLog
+            - --accessLog=true
+            - --accessLog.filePath=$DOCKER_VOL/traefik/logs/access.log
+            - --accessLog.bufferingSize=100
+            - --accessLog.filters.statusCodes=204-299,400-499,500-599
+            # file providers
+            - --providers.file.directory=${DOCKER_VOL}/traefik/conf
+            - --providers.file.watch=true
+            # docker provider
+            - --providers.docker=true
+            - --providers.swarm.endpoint=tcp://127.0.0.1:2377
+            - --providers.swarm.exposedByDefault=false
+            - --providers.swarm.network=public
+            - --providers.swarm.defaultRule="Host(`{{ .Name }}.{{ index .Labels \"customLabel\" }}`)"
+            - --providers.swarm.constraints="Label(`traefik.constraint-label`, `traefik-certs`)"
+            - --providers.swarm.refreshSeconds=30
+            - --providers.swarm.httpClientTimeout=300
+            - --providers.swarm.allowEmptyServices=true
+            - --providers.swarm.watch=true
+            # tls options
+            - --entrypoints.ssl.http.tls=true
+            - --entrypoints.ssl.http.tls.options=tls-opts@file
+            # add dns-cloudflare as default certresolver
+            - --entrypoints.ssl.http.tls.certresolver=dns-cloudflare
+            - --entrypoints.ssl.http.tls.domains[0].main=$DOMAIN
+            - --entrypoints.ssl.http.tls.domains[0].sans=*.$DOMAIN
+            # certresolvers
+            - --certificatesResolvers.dns-cloudflare.acme.caServer=https://acme-staging-v02.api.letsencrypt.org/directory
+            - --certificatesResolvers.dns-cloudflare.acme.storage=${DOCKER_VOL}/traefik/cert
+            - --certificatesResolvers.dns-cloudflare.acme.dnsChallenge.provider=cloudflare
+            - --certificatesResolvers.dns-cloudflare.acme.dnsChallenge.resolvers=1.1.1.1:53,1.0.0.1:53
+            - --certificatesResolvers.dns-cloudflare.acme.dnsChallenge.delayBeforeCheck=10
+        # healthcheck:
+        #     test: ["CMD","traefik","healthcheck","--ping"]
+        #     interval: 5s
+        #     retries: 3
+        labels:
+            # - autoheal=true
+            - traefik.enabled=true
+            # HTTP Routers
+            - traefik.http.routers.traefik.entrypoints=ssl
+            - traefik.http.routers.traefik.rule=Host(`traefik.$DOMAIN`)
+            # Services
+            - traefik.http.routers.api.service=api@internal
+            # Healthcheck / ping
+            # - "traefik.http.routers.ping.rule=Host(`traefik.$DOMAIN`) && Path(`/ping`)"
+            # - "traefik.http.routers.ping.tls=true"
+            # - "traefik.http.routers.ping.service=ping@internal"
+            # Middleware
+            - "traefik.http.routers.basic-auth.middlewares=chain-basic-auth@file"
+
+## SECRETS #########################################################
+secrets:
+
+    basic_auth_credentials:
+        external: true
+
+    CF_DNS_API_TOKEN:
+        external: true
+
+## NETWORKS ########################################################
+networks:
+    public:
+        external: true
+    private:
+        external: true

@@ -1,0 +1,30 @@
+####################################################################
+# Author:       Ragdata
+# Date:         12/02/2025
+# License:      MIT License
+# Copyright:    Copyright © 2025 Redeyed Technologies
+####################################################################
+# SVC - Proxmox VE
+####################################################################
+http:
+    routers:
+        proxmox-rtr:
+            rule: "Host(`pve.{{env "DOMAIN"}}`)"
+            entryPoints:
+                - websecure
+            middlewares:
+                - chain-oauth
+            service: proxmox-svc
+            tls:
+                certResolver: dns-cloudflare
+                options: tls-opts@file
+    services:
+        proxmox-svc:
+            loadBalancer:
+                passHostHeader: true
+                serversTransport: "pve"
+                servers:
+                    - url: "https://10.0.0.110:8006/"
+    serversTransports:
+        pve:
+            insecureSkipVerify: true
